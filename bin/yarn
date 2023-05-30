@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+exec container meteor yarn "$@"
