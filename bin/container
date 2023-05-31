@@ -180,10 +180,10 @@ else
   container_status=$(docker container inspect -f '{{.State.Status}}' $container_name 2>/dev/null)
 
   if [ "$container_status" != "running" ]; then
-    docker start $container_name
+    docker start $container_name > /dev/null
   fi
 fi
 
-docker exec -it -w "$PWD" $container_name "$@"
+docker exec -it -w "$PWD" -e MONGO_URL $container_name "$@"
 
 # ] <-- needed because of Argbash

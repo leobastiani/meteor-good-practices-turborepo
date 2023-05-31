@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+set -euo pipefail
+IFS=$'\n\t'
+
+mkdir -p tmp/db
+
+project_root="$(realpath "$(dirname "$0")/..")"
+
+container_name="$(basename "$project_root")-db"
+docker_container_id=$(docker ps -a -q -f name=$container_name)
+
+if [ -z "$docker_container_id" ]; then
+  docker run -d --name "$container_name" --rm -p "27017:27017" -v ./tmp/db:/data/db mongo:6.0.3
+fi
+
+cd apps/web
+
+MONGO_URL='mongodb://host.docker.internal:27017/' meteor

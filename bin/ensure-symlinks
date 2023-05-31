@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+set -euo pipefail
+IFS=$'\n\t'
+
+cd apps/web
+ln -sf ../../node_modules node_modules
