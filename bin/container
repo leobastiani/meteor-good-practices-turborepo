@@ -152,6 +152,10 @@ RUN meteor --version
 RUN meteor npm install -g yarn
 
 RUN mkdir -p "$project_root"
+
+COPY bin/node $HOME/.meteor
+COPY bin/yarn $HOME/.meteor
+COPY bin/npm $HOME/.meteor
 EOF
 )"
 
@@ -163,7 +167,7 @@ fi
 docker_container_id=$(docker ps -a -q -f name=$container_name)
 
 if [ -z "$docker_container_id" ]; then
-  echo "$dockerfile" | docker build -t "$image_name" -
+  echo "$dockerfile" | docker build -t "$image_name" -f - .
   docker run \
     -d \
     --platform=linux/amd64 \
